@@ -145,11 +145,11 @@ Et voilà! We have a VBA macro that can be used to run `cmd.exe` within _Word_ o
 
 However, it has several drawbacks:
 
-### 1) It only runs `cmd.exe`
+### It only runs `cmd.exe`
 
 Thanks to the command prompt, we can browse the entire file system easily, and... ...that's about all. Indeed, we won't be able to execute any other commands since it would require the creation of subprocesses. In addition, the shellcode was developed to run `cmd.exe` only and creating a new one to execute another PE file might represent a tedious task. 
 
-### 2) __It is only 32-bit compatible__
+### __It is only 32-bit compatible__
 
 This time, I was very lucky because a 32-bit version of _Office_ was installed in the virtual environment. If a 64-bit version was installed instead, the code would have failed. 
 
