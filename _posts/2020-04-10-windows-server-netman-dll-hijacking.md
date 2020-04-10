@@ -26,7 +26,7 @@ I considered 3 DLL hijacking cases:
 
 The first case might lead to Denial of Service so I left it aside. The second case is interesting but can be a bit difficult to spot amongst all the results returned by Procmon. The third case is definetly the most interesting one. If the DLL doesn't exist, the risk of causing a Denial of Service when hijacking it is reduced and it's also easy to spot in Procmon. 
 
-To do so, I didn't add a new filter in Process Moniter. Instead, I simply added __a rule which highlights all the paths containing__ `WindowsPowerShell`. Why this particular keyword, you may ask. On all (modern) versions of Windows, `C:\Windows\System32\WindowsPowerShell\v1.0\` is part of the default `%PATH%` folders. Therefore, whenever you see a program trying to load a DLL from this folder, it most probably means that it is prone to __DLL Hijacking__. 
+To do so, I didn't add a new filter in Process Monitor. Instead, I simply added __a rule which highlights all the paths containing__ `WindowsPowerShell`. Why this particular keyword, you may ask. On all (modern) versions of Windows, `C:\Windows\System32\WindowsPowerShell\v1.0\` is part of the default `%PATH%` folders. Therefore, whenever you see a program trying to load a DLL from this folder, it most probably means that it is prone to __DLL Hijacking__. 
 
 I then tried to start/stop each __service__ or __scheduled task__ I could. And, after having spent a few hours staring at Procmon's output, I finally saw this:
 
