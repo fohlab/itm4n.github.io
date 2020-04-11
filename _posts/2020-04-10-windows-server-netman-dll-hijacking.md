@@ -96,7 +96,7 @@ Anyway, let's hope for the best and start by checking the Stack Trace once again
   <img src="/assets/posts/2020-04-10-windows-server-netman-dll-hijacking/08_procmon-stack-trace-symbols.png">
 </p>
 
-We can see that the `CLanConnection::GetProperties()` is called here. In other events, the `CLanConnection::GetPropertiesEx()` is called instead. Let's see if we can find these methods by inspecting the COM objects exposed by __NetMan__ using [OleViewDotNet](https://github.com/tyranid/oleviewdotnet).
+We can see that the `CLanConnection::GetProperties()` method is called here. In other events, the `CLanConnection::GetPropertiesEx()` is called instead. Let's see if we can find these methods by inspecting the COM objects exposed by __NetMan__ using [OleViewDotNet](https://github.com/tyranid/oleviewdotnet).
 
 <p align="center">
   <img src="/assets/posts/2020-04-10-windows-server-netman-dll-hijacking/09_oleviewdotnet-netman-classes.png">
@@ -120,7 +120,7 @@ COM objects are securable too and they have ACLs which define who is allowed to 
 
 When I first saw `Administrators` and `NT AUTHORITY\...`, I thought for a second, "crap, this can only be triggered by high-privileged accounts". And then I saw `NT AUTHORITY\INTERACTIVE`, phew... :sweat_smile:
 
-What this actually means is that this COM object can be used by normal users __only if__ if they are authenticated using an __interactive session__. More specifically, you'd need to logon locally on the server. Not very useful, right?! Well, it turns out that when you connect through RDP (this includes VDI), you get an interactive session as well so, under these circumstances, this COM object could be used by a normal user. Otherwise, if you tried to use it in a WinRM session for example, you'd get an "Access denied" error. That's not as good as I expected initially but that's still a seemingly interesting trigger.
+What this actually means is that this COM object can be used by normal users __only if__ they are authenticated using an __interactive session__. More specifically, you'd need to logon locally on the server. Not very useful, right?! Well, it turns out that when you connect through RDP (this includes VDI), you get an interactive session as well so, under these circumstances, this COM object could be used by a normal user. Otherwise, if you tried to use it in a WinRM session for example, you'd get an "Access denied" error. That's not as good as I expected initially but that's still a seemingly interesting trigger.
 
 The below screenshot shows a command prompt opened in an RDP session on Windows Server 2019.
 
