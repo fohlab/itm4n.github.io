@@ -70,7 +70,7 @@ This DLL hijacking opportunity is due to the fact that the Wlan API is not insta
 
 Luckily, I use quite a lot of virtual machines for my research and I had instances of Windows Server 2012 R2 and 2019 already set up so it didn't take long to verify. 
 
-On Windows Server 2012 R2, `wlanhlp.dll` doesn't show up in Procmon. However `wlanapi.dll` does instead. Looking at the details of the event, it turns out that the it is identical. This means that Windows 6.3 (8.1 / 2012 R2) is also "affected". 
+On Windows Server 2012 R2, `wlanhlp.dll` doesn't show up in Procmon. However `wlanapi.dll` does instead. Looking at the details of the event, it turns out that it is identical. This means that Windows 6.3 (8.1 / 2012 R2) is also "affected". 
 
 <p align="center">
   <img src="/assets/posts/2020-04-10-windows-server-netman-dll-hijacking/06_procmon-2012r2-wlanapi.png">
