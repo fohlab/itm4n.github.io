@@ -96,7 +96,7 @@ Anyway, let's hope for the best and start by checking the Stack Trace once again
   <img src="/assets/posts/2020-04-10-windows-server-netman-dll-hijacking/08_procmon-stack-trace-symbols.png">
 </p>
 
-We can see that the `CLanConnection::GetProperties()` method is called here. In other events, the `CLanConnection::GetPropertiesEx()` is called instead. Let's see if we can find these methods by inspecting the COM objects exposed by __NetMan__ using [OleViewDotNet](https://github.com/tyranid/oleviewdotnet).
+We can see that the `CLanConnection::GetProperties()` method is called here. In other events, the `CLanConnection::GetPropertiesEx()` method is called instead. Let's see if we can find these methods by inspecting the COM objects exposed by __NetMan__ using [OleViewDotNet](https://github.com/tyranid/oleviewdotnet).
 
 <p align="center">
   <img src="/assets/posts/2020-04-10-windows-server-netman-dll-hijacking/09_oleviewdotnet-netman-classes.png">
