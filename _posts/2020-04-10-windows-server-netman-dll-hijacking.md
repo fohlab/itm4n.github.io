@@ -152,7 +152,7 @@ int main()
     if (SUCCEEDED(hResult))
     {
         INetConnectionManager* pConnectionManager = 0;
-        HRESULT hResult = CoCreateInstance(CLSID_ConnectionManager, 0, CLSCTX_ALL, __uuidof(INetConnectionManager), (void**)&pConnectionManager);
+        hResult = CoCreateInstance(CLSID_ConnectionManager, 0, CLSCTX_ALL, __uuidof(INetConnectionManager), (void**)&pConnectionManager);
         if (SUCCEEDED(hResult))
         {
             IEnumNetConnection* pEnumConnection = 0;
@@ -194,6 +194,7 @@ int main()
     {
         wprintf(L"[-] CoInitializeEx() failed. Error code = 0x%08X (%ls)\n", hResult, _com_error(hResult).ErrorMessage());
     }
+    FreeLibrary(hModule);
     wprintf(L"Done\n");
 }
 ```
