@@ -211,9 +211,25 @@ The screenshot below shows an attempt to run the same executable as a normal use
   <img src="/assets/posts/2020-04-10-windows-server-netman-dll-hijacking/14_winrm.png">
 </p>
 
+## (2020-04-13 update) Dealing with the INTERACTIVE restriction
+
+A couple days after the publication of this blog post, [@splinter_code](https://twitter.com/splinter_code) brought to my attention that it was technically possible to __spawn an interactive process from a non-interactive one__.
+
+Then, I had the chance to exchange a few words with him. It turns out that he developped a tool called [RunasCs](https://github.com/antonioCoco/RunasCs) which implements among other things __a generic way for spawning an interactive process__. He also took the time to explain to me how it works. This trick involves some Windows internals subtleties which are not commonly well known. I won't detail the technique here because it would require a dedicated blog post in order to explain everything clearly but I'll try to give a high-level explanation. I hope we will see a blog post from the author himself soon! :slightly_smiling_face:
+
+To put it simple, you can call `CreateProcessWithLogon()` in order to create __an interactive process__. This function requires the name and the password of the target user. The problem is that if you try to do that from a process running in session 0 (where most of the services live), the child process will immediately die. A typical example is when you connect remotely through WinRM. All your commands are executed through a subprocess running is session 0 with your identity.
+
+Why is it a problem? You may ask. The thing is, an __interactive__ process is called this way because it interacts with a desktop, which is a particular securable object in the Windows world. However, in the case of our WinRM process which runs in session 0, you wouldn't (and you shouldn't) be allowed to interact with this desktop. What [@splinter_code](https://twitter.com/splinter_code) found is that you can edit the ACL of the desktop object in the context of the current process in order to grant the current user access to this object. Child processes will then inherit these permissions and therefore have a desktop to interact with. Really clever!
+
+As you can see on the below screenshot, using this trick, we can spawn __an interactive process__ and therefore run `NetManTrigger.exe` as if we were logged in locally. :slightly_smiling_face:
+
+<p align="center">
+  <img src="/assets/posts/2020-04-10-windows-server-netman-dll-hijacking/15_winrm-interactive-process.png">
+</p>
+
 ## Conclusion
 
-Following this analysis, I can say that the __NetMan__ service is probably the __most useful target for DLL Hijacking__ I know about. It comes with a small caveat though. __As a normal user__ you would need an __interactive session__ (RDP / VDI), which makes it quite useless if you're logged on through a remote PowerShell session for instance. But there is another interesting case, if you've compromised another service running as `LOCAL SERVICE` or `NETWORK SERVICE`, then you would still be able to trigger the __NetMan__ service to elevate your privileges to `SYSTEM`.
+Following this analysis, I can say that the __NetMan__ service is probably the __most useful target for DLL Hijacking__ I know about. ~~It comes with a small caveat though. __As a normal user__ you would need an __interactive session__ (RDP / VDI), which makes it quite useless if you're logged on through a remote PowerShell session for instance.~~ But there is another interesting case, if you've compromised another service running as `LOCAL SERVICE` or `NETWORK SERVICE`, then you would still be able to trigger the __NetMan__ service to elevate your privileges to `SYSTEM`.
 
 With this discovery, I also learned a lesson. Focusing your attention and your research on a particular environment may sometimes prevent you from finding interesting stuff, which turns out to be particularly relevant in the context of a pentest. 
 
@@ -227,4 +243,5 @@ Last but not least, I integrated this in my __Windows Privilege Escalation Check
 [https://itm4n.github.io/cve-2020-0668-windows-service-tracing-eop/](https://itm4n.github.io/cve-2020-0668-windows-service-tracing-eop/)
 - A few binary planting 0-days for Windows  
 [https://www.reddit.com/r/hacking/comments/b0lr05/a_few_binary_plating_0days_for_windows/](https://www.reddit.com/r/hacking/comments/b0lr05/a_few_binary_plating_0days_for_windows/)
-
+- RunasCs - How to spawn an interactive process  
+[https://github.com/antonioCoco/RunasCs](https://github.com/antonioCoco/RunasCs)
