@@ -373,8 +373,9 @@ layout: "post"
     updateStyleAndCode();
 </script>
 
+---
 
-## Reverse Shell Generator (alpha)
+## Reverse Shell Generator
 
 <script>
 
