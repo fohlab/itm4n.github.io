@@ -171,29 +171,22 @@ int main()
                         NcFreeNetconProperties(pConnectionProperties);
                     }
                     else
-                    {
                         wprintf(L"[-] INetConnection::GetProperties() failed. Error code = 0x%08X (%ls)\n", hResult, _com_error(hResult).ErrorMessage());
-                    }
                     pConnection->Release();
                 }
                 pEnumConnection->Release();
             }
             else
-            {
                 wprintf(L"[-] IEnumNetConnection::EnumConnections() failed. Error code = 0x%08X (%ls)\n", hResult, _com_error(hResult).ErrorMessage());
-            }
             pConnectionManager->Release();
         }
         else
-        {
             wprintf(L"[-] CoCreateInstance() failed. Error code = 0x%08X (%ls)\n", hResult, _com_error(hResult).ErrorMessage());
-        }
         CoUninitialize();
     }
     else
-    {
         wprintf(L"[-] CoInitializeEx() failed. Error code = 0x%08X (%ls)\n", hResult, _com_error(hResult).ErrorMessage());
-    }
+    
     FreeLibrary(hModule);
     wprintf(L"Done\n");
 }
