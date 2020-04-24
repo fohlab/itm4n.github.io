@@ -66,7 +66,9 @@ __Scenario 2:__ loading a Windows DLL, `dbghelp.dll` for example.
 
 The program first tries to load the DLL from `C:\MyCustomApp`, the application's directory, and doesn't find it there. Therefore, it tries to load it from the system directory `C:\Windows\System32`, where this library is actually located.
 
-We can see a potential issue here. What if the `C:\MyCustomApp` directory is configured with incorrect permissions and allows any user to add files? You guessed it, a malicious version of the DLL could be _planted_ in this directory, allowing a local attacker to execute arbitrary code in the context of any other user who would run this application. This first DLL hijacking variant is often rightly or wrongly called __DLL Sideloading__. This technique is mostly used by malwares but it can also be used for privilege escalation (see my article about [DLL Proxying](/dll-proxying/)).
+We can see a potential issue here. What if the `C:\MyCustomApp` directory is configured with incorrect permissions and allows any user to add files? You guessed it, a malicious version of the DLL could be _planted_ in this directory, allowing a local attacker to execute arbitrary code in the context of any other user who would run this application. Although that's DLL search order hijacking, this first variant is also sometimes rightly or wrongly called __DLL Sideloading__. It's mostly used by malwares but it can also be used for privilege escalation (see my article about [DLL Proxying](/dll-proxying/)).
+
+> __Note:__ in theory DLL Sideloading has a specific meaning. According to MITRE: "_Side-loading vulnerabilities specifically occur when Windows Side-by-Side (WinSxS) manifests are not explicit enough about characteristics of the DLL to be loaded. Adversaries may take advantage of a legitimate program that is vulnerable to side-loading to load a malicious DLL._" 
 
 __Scenario 3:__ loading a nonexistent DLL
 
